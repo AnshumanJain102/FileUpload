@@ -1,4 +1,4 @@
-package com.FileUpload.FileUpload.models;
+package com.FileUpload.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

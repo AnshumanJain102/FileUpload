@@ -1,11 +1,16 @@
-package com.FileUpload.FileUpload.models;
+package com.FileUpload.models;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public @Data @AllArgsConstructor class Customer {
+@Entity
+@Table(name = "Customer")
+public @Data @NoArgsConstructor @AllArgsConstructor class Customer {
 
     @Id
     @Column(name = "id")

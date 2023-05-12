@@ -1,9 +1,11 @@
-package com.FileUpload.FileUpload.helpers;
+package com.FileUpload.helpers;
 
-import com.FileUpload.FileUpload.models.Customer;
+import com.FileUpload.models.Customer;
+import com.FileUpload.repository.CustomerRepository;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,16 +16,21 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class CSVHelper {
-    public static String TYPE = "text/csv";
-    public static boolean hasCSVFormat(MultipartFile file) {
+    public String TYPE = "text/csv";
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    public boolean hasCSVFormat(MultipartFile file) {
         if (!TYPE.equals(file.getContentType())) {
             return false;
         }
         return true;
     }
 
-    public static List<Customer> csvToCustomers(InputStream is) {
+    public List<Customer> csvToCustomers(InputStream is) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
              CSVParser csvParser = new CSVParser(fileReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim());) {
@@ -39,9 +46,10 @@ public class CSVHelper {
                         csvRecord.get("contactNumbers"),
                         csvRecord.get("contactAddress")
                 );
-
                 customersList.add(customer);
             }
+
+            customerRepository.saveAll(customersList);
 
             return customersList;
         } catch (IOException e) {

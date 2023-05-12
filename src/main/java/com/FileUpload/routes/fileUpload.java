@@ -1,8 +1,9 @@
-package com.FileUpload.FileUpload.routes;
+package com.FileUpload.routes;
 
-import com.FileUpload.FileUpload.helpers.CSVHelper;
-import com.FileUpload.FileUpload.models.Customer;
-import com.FileUpload.FileUpload.models.ResponseMessage;
+import com.FileUpload.helpers.CSVHelper;
+import com.FileUpload.models.Customer;
+import com.FileUpload.models.ResponseMessage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,19 +19,23 @@ import java.util.List;
 @RequestMapping("/api/csv")
 public class fileUpload {
 
+    @Autowired
+    CSVHelper csvHelper;
+
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
 
-        if (CSVHelper.hasCSVFormat(file)) {
+        if (csvHelper.hasCSVFormat(file)) {
             try {
 
-                List<Customer> customerList =  CSVHelper.csvToCustomers(file.getInputStream());
+                List<Customer> customerList =  csvHelper.csvToCustomers(file.getInputStream());
                 System.out.println(customerList);
 
                 message = "Uploaded the file successfully: " + file.getOriginalFilename();
                 return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
             } catch (Exception e) {
+                System.out.println(e);
                 message = "Could not upload the file: " + file.getOriginalFilename() + "!";
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
             }

@@ -1,6 +1,6 @@
-package com.FileUpload.FileUpload.exceptions;
+package com.FileUpload.exceptions;
 
-import com.FileUpload.FileUpload.models.ResponseMessage;
+import com.FileUpload.models.ResponseMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
